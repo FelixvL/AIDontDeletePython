@@ -10,7 +10,7 @@ CORS(app)
 
 @app.route("/")
 def helloWorld():
-  return "Hello, cross-origin-world!"+os.environ.get('ONZEENVKEY')
+  return "Hello, cross-origin-world!"
 
 
 
