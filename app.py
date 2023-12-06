@@ -16,7 +16,7 @@ def helloWorld():
 
 @app.route("/abc/<invoer>")
 def abc(invoer):
-  openai.api_key = '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'
+  openai.api_key = os.environ.get('ONZEENVKEY')
   response = openai.ChatCompletion.create(
     model="gpt-3.5-turbo",
     messages=[{
