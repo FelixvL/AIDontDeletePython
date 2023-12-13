@@ -3,6 +3,9 @@ from flask_cors import CORS
 import os
 import openai
 import temporarydefs
+from flask import request
+import json
+
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -33,6 +36,12 @@ def abc(invoer):
   )
   return response["choices"][0]["message"]["content"]
 
-@app.route("/summarizer")
+@app.route("/summarizer", methods=['POST'])
 def summarizer():
-  return temporarydefs.summarizer(aikey)
+  data_str = request.data.decode('utf-8')
+
+  data_json = json.loads(data_str)
+
+  inputtext = data_json['inhoud']
+  print(inputtext)
+  return temporarydefs.summarizer(aikey, inputtext)
