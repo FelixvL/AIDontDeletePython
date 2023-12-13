@@ -19,7 +19,7 @@ aikey = os.environ.get('ONZEENVKEY')
 
 @app.route("/")
 def helloWorld():
-  return "Hello, cross-origin-world!"
+  return "Hello, Versie 3"
 
 
 @app.route("/abc/<invoer>")
