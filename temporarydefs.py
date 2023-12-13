@@ -68,7 +68,7 @@ def summarizer(aikey, inputtext):
     '''
         }
     ],
-    temperature=0,
+    temperature=1.1,
     max_tokens=2096,
     top_p=1.0,
     frequency_penalty=0.0,
