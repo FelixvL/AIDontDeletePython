@@ -1,10 +1,10 @@
-import openai
+from openai import OpenAI
 
 def summarizer(aikey, inputtext):
     print("in functie summarizer")
-    openai.api_key = aikey
-
-    response = openai.ChatCompletion.create(
+    client = OpenAI(api_key=aikey)
+    invoer = inputtext
+    response = client.chat.completions.create(
     model="gpt-4",
     messages=[
         {
@@ -74,6 +74,5 @@ def summarizer(aikey, inputtext):
     frequency_penalty=0.0,
     presence_penalty=0.0
     )
-    print(response["choices"][0]["message"]["content"])
-    return response["choices"][0]["message"]["content"] 
+    return response.choices[0].message.content 
 
