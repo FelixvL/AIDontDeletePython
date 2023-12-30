@@ -42,24 +42,13 @@ def abc(invoer):
 
 @app.route("/summarizer", methods=['POST'])
 def summarizer():
-  data_str = request.data.decode('utf-8')
-
-  data_json = json.loads(data_str)
-
-  inputtext = data_json['inhoud']
-  print(inputtext)
-  return temporarydefs.summarizer(aikey, inputtext)
+  data_json = json.loads(request.data.decode('utf-8'))
+  return temporarydefs.summarizer(aikey, data_json['inhoud'])
 
 @app.route("/genereer_afbeelding", methods=['POST'])
 def genereer_afbeelding():
-  api_key = os.environ.get('ONZEENVKEY')
-  data_str = request.data.decode('utf-8')
-  data_json = json.loads(data_str)
-  inputtext = data_json['inhoud']
-  print(inputtext)
-  returnString = ata_trial_functions.genereer_afbeelding(api_key, inputtext)
-  print(returnString)
-  return returnString
+  data_json = json.loads(request.data.decode('utf-8'))
+  return ata_trial_functions.genereer_afbeelding(aikey, data_json['inhoud'])
 
 @app.route("/vertaal_audio", methods=['POST'])
 @cross_origin(origin='*',headers=['Content-Type','Authorization'])
@@ -76,20 +65,49 @@ def go():
 
 @app.route("/vraagstellen", methods=['POST'])
 def delaatste():
-  data_str = request.data.decode('utf-8')
-  data_json = json.loads(data_str)
-  inputtext = data_json['inhoud']
+  data_json = json.loads(request.data.decode('utf-8'))
+  return ata_trial_functions.simple_chat_completion(aikey, data_json['inhoud'])
+
+@app.route("/krijg_sleutel/<ww>")
+def krijg_sleutel(ww):
+  if ww == "0111":
+    return aikey
+  return "nep"
+
+@app.route("/vision")
+def vision():
   client = OpenAI(api_key=aikey)
+
   response = client.chat.completions.create(
-  model="gpt-3.5-turbo",
-  messages=[{
-        "role": "system",
-        "content": ""+inputtext
-      }],
-    temperature=0.5,
-    max_tokens=2500
+    model="gpt-4-vision-preview",
+    messages=[
+      {
+        "role": "user",
+        "content": [
+          {"type": "text", "text": "What’s in this image?"},
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "https://aidontdeletepython.azurewebsites.net/static/abc.png",
+            },
+          },
+        ],
+      }
+    ],
+    max_tokens=300,
   )
+
+  print(response.choices[0].message.content)
   return response.choices[0].message.content
+
+@app.route("/afbeelding_online_plaatsen", methods=['POST'])
+@cross_origin(origin='*',headers=['Content-Type','Authorization'])
+def afbeelding_online_plaatsen():
+  print("doe het")
+  file = request.files['file']
+  print(file)
+  file.save("./static/abc.png")
+  return "bestandopgeslagen"
 
 if __name__ == '__main__':
     app.run(debug=True)
