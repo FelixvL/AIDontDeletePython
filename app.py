@@ -84,17 +84,17 @@ def vision():
       {
         "role": "user",
         "content": [
-          {"type": "text", "text": "What’s in this image?"},
+          {"type": "text", "text": "Wat is er te zien op de afbeelding, en vertel er zo veel mogelijk over."},
           {
             "type": "image_url",
             "image_url": {
-              "url": "http://0111.nl/ai/abc.png",
+              "url": "https://0111.nl/ai/abc.png",
             },
           },
         ],
       }
     ],
-    max_tokens=300,
+    max_tokens=3000,
   )
 
   print(response.choices[0].message.content)
