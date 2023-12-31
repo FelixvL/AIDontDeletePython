@@ -22,7 +22,7 @@ aikey = os.environ.get('ONZEENVKEY')
 
 @app.route("/")
 def helloWorld():
-  return "Hello, Versie 5"
+  return "Hello, Versie 1"
 
 
 @app.route("/abc/<invoer>")
@@ -89,6 +89,32 @@ def vision():
             "type": "image_url",
             "image_url": {
               "url": "https://aidontdeletepython.azurewebsites.net/static/abc.png",
+            },
+          },
+        ],
+      }
+    ],
+    max_tokens=300,
+  )
+
+  print(response.choices[0].message.content)
+  return response.choices[0].message.content
+@app.route("/vision2", methods=['POST'])
+def vision2():
+  data_json = json.loads(request.data.decode('utf-8'))
+  client = OpenAI(api_key=aikey)
+  print(data_json['inhoud'])
+  response = client.chat.completions.create(
+    model="gpt-4-vision-preview",
+    messages=[
+      {
+        "role": "user",
+        "content": [
+          {"type": "text", "text": "What’s in this image?"},
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": data_json['inhoud'],
             },
           },
         ],
