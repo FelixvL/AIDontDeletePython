@@ -88,7 +88,7 @@ def vision():
           {
             "type": "image_url",
             "image_url": {
-              "url": "https://aidontdeletepython.azurewebsites.net/static/abc.png",
+              "url": "http://0111.nl/ai/abc.png",
             },
           },
         ],
