@@ -18,7 +18,7 @@ def simple_chat_completion(aikey, vraagtekst):
     model="gpt-3.5-turbo",
     messages=[{
         "role": "system",
-        "content": ""+inputtext
+        "content": ""+vraagtekst
     }],
     temperature=0.5,
     max_tokens=2500
