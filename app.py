@@ -99,6 +99,7 @@ def vision():
 
   print(response.choices[0].message.content)
   return response.choices[0].message.content
+  
 @app.route("/vision2", methods=['POST'])
 def vision2():
   data_json = json.loads(request.data.decode('utf-8'))
@@ -134,6 +135,11 @@ def afbeelding_online_plaatsen():
   print(file)
   file.save("./static/abc.png")
   return "bestandopgeslagen"
+
+@app.route("/summarizer_per_persoon", methods=['POST'])
+def summarizer_per_persoon():
+  data_json = json.loads(request.data.decode('utf-8'))
+  return temporarydefs.summarizer_per_persoon(aikey, data_json['inhoud'])
 
 if __name__ == '__main__':
     app.run(debug=True)
