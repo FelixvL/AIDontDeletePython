@@ -10,6 +10,9 @@ import json
 import temporarydefs
 import ata_trial_functions
 
+
+from blueprints.lvsep import lvs_bp
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -20,9 +23,16 @@ app.config['CORS_HEADERS'] = 'application/json'
 
 aikey = os.environ.get('ONZEENVKEY')
 
+app.register_blueprint(lvs_bp, url_prefix='/lvs')
+
 @app.route("/")
 def helloWorld():
-  return "Hello, Versie 1"
+  return "Hello, Versie 1!"
+
+@app.route("/lvseerste")
+def lvseerste():
+  return le.eersteverbinding()
+
 
 
 @app.route("/abc/<invoer>")
