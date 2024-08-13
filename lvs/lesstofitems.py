@@ -84,34 +84,56 @@ WHERE
 ORDER BY 
     l.naam;
 """
-    print(sqlquery)
+    #print(sqlquery)
     r,c = voer_select_query_uit(sqlquery)
     return zet_om_naar_json(r,c)
 
-def student_alle_lesstofitems_per_traject(student_id):
+def student_alle_lesstofitems_per_traject(student_id, zoekterm):
+    if zoekterm == 'xxxxx':
+        zoekterm = ''
     r,c = voer_select_query_uit("SELECT * FROM student WHERE student.id = "+student_id)
-    r,c = voer_select_query_uit(f"""SELECT 
-    l.naam AS lesstofitemnaam,
-    l.id AS lesstofitemid,
-    CASE 
-        WHEN sli.id IS NOT NULL THEN 'checked'
-        ELSE ''
-    END AS statusstudent
-FROM 
-    student s
-JOIN 
-    traject t ON s.traject_id = t.id
-JOIN 
-    traject_lesstofitem tl ON tl.traject_id = t.id
-JOIN 
-    lesstofitem l ON l.id = tl.lesstofitem_id
-LEFT JOIN 
-    student_lesstofitem sli ON sli.lesstofitem_id = l.id AND sli.student_id = s.id
-WHERE 
-    t.id = {str(r[0][2])}
-    AND
-    s.id = {student_id}""")
+    sqlquery = f"""
+    SELECT 
+        l.naam AS lesstofitemnaam,
+        l.id AS lesstofitemid,
+        CASE 
+            WHEN sli.id IS NOT NULL THEN 'checked'
+            ELSE ''
+        END AS statusstudent
+    FROM 
+        student s
+    JOIN 
+        traject t ON s.traject_id = t.id
+    JOIN 
+        traject_lesstofitem tl ON tl.traject_id = t.id
+    JOIN 
+        lesstofitem l ON l.id = tl.lesstofitem_id
+    LEFT JOIN 
+        student_lesstofitem sli ON sli.lesstofitem_id = l.id AND sli.student_id = s.id
+    LEFT JOIN 
+        definitie_lesstofitem dl ON dl.lesstofitem_id = l.id
+    LEFT JOIN 
+        definitie d ON d.id = dl.definitie_id
+    WHERE 
+        t.id = {str(r[0][2])}
+        AND
+        s.id = {student_id}
+        AND
+        (
+            l.naam LIKE '%{zoekterm}%'
+            OR
+            l.inhoud LIKE '%{zoekterm}%'
+            OR
+            d.term LIKE '%{zoekterm}%'
+            OR
+            d.definitie LIKE '%{zoekterm}%'
+        )
+    ORDER BY 
+        l.naam;
+    """
 
+    print(sqlquery)
+    r,c = voer_select_query_uit(sqlquery)
     return zet_om_naar_json(r,c)
 
 def docent_ken_lesstofitem_toe_aan_traject(traject_id,lesstofitem_id):
@@ -139,3 +161,11 @@ def inloggen(wachtwoord):
 def inhoud_lesstofitem(lsid):
     r,c = voer_select_query_uit("SELECT * FROM lesstofitem WHERE id = "+str(lsid))
     return zet_om_naar_json(r,c)
+
+def maak_student_aan(studentnaam):
+    r = voer_insert_query_uit("INSERT INTO student (naam, traject_id) VALUES (%s, %s)",(studentnaam,0))
+    return '{"yes":"docent_ken_lesstofitem_toe_aan_traject"}'
+
+def maak_traject_aan(trajectnaam):
+    r = voer_insert_query_uit("INSERT INTO traject (naam, zichtbaar) VALUES (%s, %s)",(trajectnaam, 0))
+    return '{"yes":"docent_ken_lesstofitem_toe_aan_traject"}'
