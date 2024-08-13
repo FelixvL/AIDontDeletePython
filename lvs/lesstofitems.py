@@ -51,7 +51,8 @@ def docent_alle_trajecten():
 def docent_alle_lesstofitems_per_traject(traject_id, zoekterm):
     if zoekterm == 'xxxxx':
         zoekterm = ''
-    r,c = voer_select_query_uit(f"""SELECT 
+    sqlquery = f"""
+SELECT 
     l.naam AS lesstofitemnaam,
     l.id AS lesstofitemid,
     CASE 
@@ -62,20 +63,27 @@ FROM
     lesstofitem l
 LEFT JOIN 
     traject_lesstofitem tl ON l.id = tl.lesstofitem_id AND tl.traject_id = {traject_id}
+LEFT JOIN
+    definitie_lesstofitem dl ON l.id = dl.lesstofitem_id
+LEFT JOIN
+    definitie d ON dl.definitie_id = d.id
 WHERE
-    l.naam LIKE '%{zoekterm}%'
+    (l.naam LIKE '%{zoekterm}%'
     OR
     l.inhoud LIKE '%{zoekterm}%'
+    OR
+    d.term LIKE '%{zoekterm}%'
+    OR
+    d.definitie LIKE '%{zoekterm}%')
 ORDER BY 
     l.naam;
-""")
+"""
+    print(sqlquery)
+    r,c = voer_select_query_uit(sqlquery)
     return zet_om_naar_json(r,c)
 
 def student_alle_lesstofitems_per_traject(student_id):
     r,c = voer_select_query_uit("SELECT * FROM student WHERE student.id = "+student_id)
-    print(r)
-    print(r[0])
-    print(r[0][2])
     r,c = voer_select_query_uit(f"""SELECT 
     l.naam AS lesstofitemnaam,
     l.id AS lesstofitemid,
@@ -101,15 +109,11 @@ WHERE
     return zet_om_naar_json(r,c)
 
 def docent_ken_lesstofitem_toe_aan_traject(traject_id,lesstofitem_id):
-    print(traject_id, " go ", lesstofitem_id)
     r = voer_insert_query_uit("INSERT INTO traject_lesstofitem (traject_id, lesstofitem_id) VALUES (%s, %s)",(traject_id,lesstofitem_id))
-    print(r)
     return '{"yes":"docent_ken_lesstofitem_toe_aan_traject"}'
 
 def student_ken_lesstofitem_toe_aan_student(student_id, lesstofitem_id):
-    print(student_id, " jo ", lesstofitem_id)
     r = voer_insert_query_uit("INSERT INTO student_lesstofitem (student_id, lesstofitem_id) VALUES (%s, %s)",(student_id,lesstofitem_id))
-    print(r)
     return '{"yes":"student_ken_lesstofitem_toe_aan_student"}'   
 
 def docent_maak_lesstofitem_aan(data):

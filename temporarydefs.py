@@ -1,7 +1,6 @@
 from openai import OpenAI
 
 def summarizer(aikey, inputtext):
-    print("in functie summarizer")
     client = OpenAI(api_key=aikey)
     invoer = inputtext
     messagesfirst = [
@@ -66,7 +65,6 @@ def summarizer(aikey, inputtext):
     '''
         }
     ]
-    print(messagesfirst)
     response = client.chat.completions.create(
     model="gpt-4",
     messages=messagesfirst,
@@ -86,8 +84,6 @@ def summarizer_per_persoon(aikey, inputtext):
     antwoord_text = ""
     for persoon in lijst_personen:
         antwoord_text += call_naar_chatGPT(aikey, persoon) + "<hr><hr>"
-        print("========")
-        print(antwoord_text)
         
     return antwoord_text
 

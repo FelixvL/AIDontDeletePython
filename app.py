@@ -47,7 +47,6 @@ def abc(invoer):
     temperature=0.5,
     max_tokens=256
   )
-  print(response)
   return response.choices[0].message.content
 
 @app.route("/summarizer", methods=['POST'])
@@ -106,15 +105,12 @@ def vision():
     ],
     max_tokens=3000,
   )
-
-  print(response.choices[0].message.content)
   return response.choices[0].message.content
   
 @app.route("/vision2", methods=['POST'])
 def vision2():
   data_json = json.loads(request.data.decode('utf-8'))
   client = OpenAI(api_key=aikey)
-  print(data_json['inhoud'])
   response = client.chat.completions.create(
     model="gpt-4-vision-preview",
     messages=[
@@ -133,16 +129,12 @@ def vision2():
     ],
     max_tokens=300,
   )
-
-  print(response.choices[0].message.content)
   return response.choices[0].message.content
 
 @app.route("/afbeelding_online_plaatsen", methods=['POST'])
 @cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def afbeelding_online_plaatsen():
-  print("doe het")
   file = request.files['file']
-  print(file)
   file.save("./static/abc.png")
   return "bestandopgeslagen"
 
