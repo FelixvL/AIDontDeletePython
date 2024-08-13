@@ -35,6 +35,11 @@ def zet_om_naar_json(record_set, cursor):
     ]
     return data
 
+def alle_studenten():
+    r,c = voer_select_query_uit("SELECT * FROM student")
+    return zet_om_naar_json(r,c)
+    
+
 def toon_alle_lesstofitems():
     r,c = voer_select_query_uit("SELECT * FROM lesstofitem")
     return zet_om_naar_json(r,c)
