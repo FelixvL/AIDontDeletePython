@@ -48,7 +48,9 @@ def docent_alle_trajecten():
     r,c = voer_select_query_uit("SELECT * FROM traject")
     return zet_om_naar_json(r,c)
 
-def docent_alle_lesstofitems_per_traject(traject_id):
+def docent_alle_lesstofitems_per_traject(traject_id, zoekterm):
+    if zoekterm == 'xxxxx':
+        zoekterm = ''
     r,c = voer_select_query_uit(f"""SELECT 
     l.naam AS lesstofitemnaam,
     l.id AS lesstofitemid,
@@ -60,6 +62,10 @@ FROM
     lesstofitem l
 LEFT JOIN 
     traject_lesstofitem tl ON l.id = tl.lesstofitem_id AND tl.traject_id = {traject_id}
+WHERE
+    l.naam LIKE '%{zoekterm}%'
+    OR
+    l.inhoud LIKE '%{zoekterm}%'
 ORDER BY 
     l.naam;
 """)
@@ -107,5 +113,15 @@ def student_ken_lesstofitem_toe_aan_student(student_id, lesstofitem_id):
     return '{"yes":"student_ken_lesstofitem_toe_aan_student"}'   
 
 def docent_maak_lesstofitem_aan(data):
-    r = voer_insert_query_uit("INSERT INTO lesstofitem (naam, inhoud) VALUES (%s, %s)",(data.get('lsi_titel'), data.get('lsi_titel')))
+    r = voer_insert_query_uit("INSERT INTO lesstofitem (naam, inhoud) VALUES (%s, %s)",(data.get('lsi_titel'), data.get('lsi_inhoud')))
     return '{"yes":"docent_maak_lesstofitem_aa"}' 
+
+def inloggen(wachtwoord):
+    if wachtwoord == 'a':
+        return '{"docenturl":"docent_invoeren.html"}'
+    else:
+        return '{"docenturl":"http://nos.nl"}'
+
+def inhoud_lesstofitem(lsid):
+    r,c = voer_select_query_uit("SELECT * FROM lesstofitem WHERE id = "+str(lsid))
+    return zet_om_naar_json(r,c)
