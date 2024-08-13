@@ -88,7 +88,7 @@ JOIN
 LEFT JOIN 
     student_lesstofitem sli ON sli.lesstofitem_id = l.id AND sli.student_id = s.id
 WHERE 
-    s.id = """+str(r[0][2]))
+    t.id = """+str(r[0][2]))
     return zet_om_naar_json(r,c)
 
 def docent_ken_lesstofitem_toe_aan_traject(traject_id,lesstofitem_id):
