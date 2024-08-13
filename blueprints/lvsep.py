@@ -9,7 +9,9 @@ from LVS import lesstofitems as li
 def lvs_allestudenten():
   return li.toon_alle_lesstofitems()
 
-
+@lvs_bp.route("/alle_studenten")
+def alle_studenten():
+  return li.alle_studenten()
 @lvs_bp.route("/docent_alle_trajecten")
 def lvs_docent_alle_trajecten():
   return li.docent_alle_trajecten()
