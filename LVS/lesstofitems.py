@@ -70,7 +70,7 @@ def student_alle_lesstofitems_per_traject(student_id):
     print(r)
     print(r[0])
     print(r[0][2])
-    r,c = voer_select_query_uit("""SELECT 
+    r,c = voer_select_query_uit(f"""SELECT 
     l.naam AS lesstofitemnaam,
     l.id AS lesstofitemid,
     CASE 
@@ -88,7 +88,10 @@ JOIN
 LEFT JOIN 
     student_lesstofitem sli ON sli.lesstofitem_id = l.id AND sli.student_id = s.id
 WHERE 
-    t.id = """+str(r[0][2]))
+    t.id = {str(r[0][2])}
+    AND
+    s.id = {student_id}""")
+
     return zet_om_naar_json(r,c)
 
 def docent_ken_lesstofitem_toe_aan_traject(traject_id,lesstofitem_id):
