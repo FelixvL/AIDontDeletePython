@@ -25,9 +25,9 @@ def lvs_docent_alle_lesstofitems_per_traject(traject_id, zoekterm):
 def lvs_docent_alle_definities(zoekterm):
   return li.docent_alle_definities(zoekterm)
 
-@lvs_bp.route("student_alle_lesstofitems_per_traject/<student_id>")
-def lvs_student_alle_lesstofitems_per_traject(student_id):
-  return li.student_alle_lesstofitems_per_traject(student_id)
+@lvs_bp.route("student_alle_lesstofitems_per_traject/<student_id>/<zoekterm>")
+def lvs_student_alle_lesstofitems_per_traject(student_id, zoekterm):
+  return li.student_alle_lesstofitems_per_traject(student_id, zoekterm)
 
 @lvs_bp.route("docent_ken_lesstofitem_toe_aan_traject/<traject_id>/<lesstofitem_id>")
 def lvs_docent_ken_lesstofitem_toe_aan_traject(traject_id,lesstofitem_id):
@@ -53,3 +53,10 @@ def inloggen(wachtwoord):
 def inhoud_lesstofitem(lsid):
   return li.inhoud_lesstofitem(lsid)
   
+@lvs_bp.route('maak_traject_aan/<trajectnaam>')
+def maak_traject_aan(trajectnaam):
+  return li.maak_traject_aan(trajectnaam)
+
+@lvs_bp.route('maak_student_aan/<studentnaam>')
+def maak_student_aan(studentnaam):
+  return li.maak_student_aan(studentnaam)
