@@ -131,7 +131,7 @@ def docent_maak_definitie_aan(data):
     return '{"yes":"docent_maak_definitie_aa"}' 
 
 def inloggen(wachtwoord):
-    if wachtwoord == 'a':
+    if wachtwoord == os.environ.get('ONSINLOGWACHTWOORD'):
         return '{"docenturl":"docent_invoeren.html"}'
     else:
         return '{"docenturl":"http://nos.nl"}'
