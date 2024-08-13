@@ -3,7 +3,7 @@ from flask import Blueprint, request
 # Maak een Blueprint aan
 lvs_bp = Blueprint('lvs', __name__)
 
-from LVS import lesstofitems as li
+from lvs import lesstofitems as li
 
 @lvs_bp.route("/allelesstofitems")
 def lvs_allestudenten():
