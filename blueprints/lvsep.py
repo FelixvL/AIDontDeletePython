@@ -60,3 +60,18 @@ def maak_traject_aan(trajectnaam):
 @lvs_bp.route('maak_student_aan/<studentnaam>')
 def maak_student_aan(studentnaam):
   return li.maak_student_aan(studentnaam)
+
+
+@lvs_bp.route('kies_traject')
+def kies_traject():
+  return li.docent_alle_trajecten()
+
+@lvs_bp.route('koppel_traject/<tid>/<sid>')
+def koppel_traject(tid, sid):
+  return li.koppel_traject(tid, sid)
+
+@lvs_bp.route('heeft_student_traject/<sid>')
+def heeft_student_traject(sid):
+  return li.heeft_student_traject(sid)
+
+

@@ -169,3 +169,14 @@ def maak_student_aan(studentnaam):
 def maak_traject_aan(trajectnaam):
     r = voer_insert_query_uit("INSERT INTO traject (naam, zichtbaar, gewijzigd) VALUES (%s, %s, CURRENT_TIMESTAMP)",(trajectnaam, 0))
     return '{"yes":"docent_ken_lesstofitem_toe_aan_traject"}'
+
+def koppel_traject(tid, sid):
+    r = voer_insert_query_uit(f"UPDATE student SET traject_id = %s WHERE id = %s",(tid,sid))
+    return '{"yes":"koppel_traject"}'
+
+def heeft_student_traject(sid):
+    r,c = voer_select_query_uit("SELECT * FROM student WHERE id = "+sid)
+    if r[0][2] == 0:
+        return 'true'
+    else:
+        return 'false'
