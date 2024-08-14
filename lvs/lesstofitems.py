@@ -167,5 +167,5 @@ def maak_student_aan(studentnaam):
     return '{"yes":"docent_ken_lesstofitem_toe_aan_traject"}'
 
 def maak_traject_aan(trajectnaam):
-    r = voer_insert_query_uit("INSERT INTO traject (naam, zichtbaar) VALUES (%s, %s)",(trajectnaam, 0))
+    r = voer_insert_query_uit("INSERT INTO traject (naam, zichtbaar, gewijzigd) VALUES (%s, %s, CURRENT_TIMESTAMP)",(trajectnaam, 0))
     return '{"yes":"docent_ken_lesstofitem_toe_aan_traject"}'
