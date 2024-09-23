@@ -80,7 +80,7 @@ def delaatste():
 @app.route("/krijg_sleutel/<ww>")
 def krijg_sleutel(ww):
   if ww == "0111":
-    return aikey
+    return "fake"
   return "nep"
 
 @app.route("/vision")
