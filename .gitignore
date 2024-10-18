@@ -1,5 +1,6 @@
 __pycache__/**
 LVS/__pycache__/**
+ai/__pycache__/**
 blueprints/__pycache__/**
 .env
 .DS_Store
