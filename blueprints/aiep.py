@@ -93,6 +93,21 @@ def brengrecordover(recid):
 # De getranscribeerde tekst weergeven
   print(transcript.text)
 
-  return "breng record over gelukt" + transcript.text
+  return "BERICHT: " + transcript.text
 
-
+@ai_bp.route("/allerecs", methods=['GET'])
+def allerecs():
+  conn = mysql.connector.connect(
+      host=os.environ.get('ONZEDATABASESERVER'),    # Je hostnaam (bijv. 'localhost')
+      user=os.environ.get('ONZEDATABASEUSER'),  # Je MySQL gebruikersnaam
+      password=os.environ.get('ONZEDATABASEWACHTWOORD'),  # Je MySQL wachtwoord
+      database="__ai"  # De database waarmee je verbinding wilt maken
+  )
+  sql = "SELECT * FROM opnamen"
+  cursor = conn.cursor()
+  cursor.execute(sql)
+  resultaten = cursor.fetchall()
+  returnstring = ""
+  for r in resultaten:
+    returnstring += r[1]+"<br>"
+  return returnstring
