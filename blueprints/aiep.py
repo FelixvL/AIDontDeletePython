@@ -15,7 +15,7 @@ from ai import aifuncties as aif
 
 @ai_bp.route("/aitest")
 def lvs_allestudenten():
-  return "aitest v1"
+  return "aitest v2"
 
 
 @ai_bp.route("/voice", methods=['POST'])
@@ -56,7 +56,7 @@ def handle_recording():
   val = (recording_url, "0615517962")
   cursor = conn.cursor()
   cursor.execute(sql, val)
-  c.commit()
+  conn.commit()
   # Bedank de beller en beëindig het gesprek
   resp = VoiceResponse()
   resp.say("Thanks for you update, see you around!", voice='alice')
