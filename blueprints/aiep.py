@@ -20,6 +20,7 @@ def voice_reply():
 
 @ai_bp.route("/voice2", methods=['POST'])
 def voice_reply2():
+    print("stap1")
     # Creëer een Twilio Voice Response object
     resp = VoiceResponse()
 
@@ -27,7 +28,7 @@ def voice_reply2():
     resp.say("Hallo! Dit gesprek wordt opgenomen.", voice='alice')
 
     # Begin de opname
-    resp.record(maxLength=60, playBeep=True, action="/handle-recording")
+    resp.record(maxLength=60, playBeep=True, action="/ai/handle-recording")
 
     return str(resp)
 
