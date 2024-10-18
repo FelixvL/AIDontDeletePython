@@ -3,6 +3,7 @@ from twilio.twiml.voice_response import VoiceResponse
 import os
 import requests
 from openai import OpenAI
+import mysql.connector
 
 from dotenv import load_dotenv
 load_dotenv()
