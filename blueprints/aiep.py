@@ -27,7 +27,7 @@ def voice_reply2():
     resp.say("Hallo! Dit gesprek wordt opgenomen.", voice='alice')
 
     # Begin de opname
-    resp.record(maxLength=60, playBeep=True, action="/handle-recording", recordingStatusCallback="/recording-complete")
+    resp.record(maxLength=60, playBeep=True, action="/handle-recording")
 
     return str(resp)
 
