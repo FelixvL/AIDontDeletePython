@@ -12,6 +12,7 @@ import ata_trial_functions
 
 
 from blueprints.lvsep import lvs_bp
+from blueprints.aiep import ai_bp
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -24,6 +25,7 @@ app.config['CORS_HEADERS'] = 'application/json'
 aikey = os.environ.get('ONZEENVKEY')
 
 app.register_blueprint(lvs_bp, url_prefix='/lvs')
+app.register_blueprint(ai_bp, url_prefix='/ai')
 
 @app.route("/")
 def helloWorld():
