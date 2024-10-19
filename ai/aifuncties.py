@@ -1,4 +1,5 @@
 from twilio.twiml.voice_response import VoiceResponse
+from flask import request
 import os
 import requests
 from openai import OpenAI
@@ -62,3 +63,6 @@ def allerecs():
   for r in resultaten:
     returnstring += "<a href=\"https://pythonapplicatie-c4fub0d3eqbyc7gt.westeurope-01.azurewebsites.net/ai/brengrecordover/"+r[1].split("/")[7]+"\">"+r[1].split("/")[7]+"</a><br>"
   return returnstring  
+
+def praxisvraag(term):
+  return "praxisvraag"
