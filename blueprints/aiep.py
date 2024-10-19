@@ -16,7 +16,7 @@ def handle_recording():
   
 @ai_bp.route("/brengrecordover/<recid>", methods=['GET'])
 def recording_ai_transcript(recid):
-  return aif.recording_ai_transcript()
+  return aif.recording_ai_transcript(recid)
 
 @ai_bp.route("/allerecs", methods=['GET'])
 def allerecs():
