@@ -16,10 +16,10 @@ def voice():
 def handle_recording():
   recording_url = request.form["RecordingUrl"]
   conn = mysql.connector.connect(
-      host=os.environ.get('ONZEDATABASESERVER'),    # Je hostnaam (bijv. 'localhost')
-      user=os.environ.get('ONZEDATABASEUSER'),  # Je MySQL gebruikersnaam
-      password=os.environ.get('ONZEDATABASEWACHTWOORD'),  # Je MySQL wachtwoord
-      database="__ai"  # De database waarmee je verbinding wilt maken
+      host=os.environ.get('ONZEDATABASESERVER'),    
+      user=os.environ.get('ONZEDATABASEUSER'),  
+      password=os.environ.get('ONZEDATABASEWACHTWOORD'), 
+      database="__ai" 
   )
   sql = "INSERT INTO opnamen (opname_id, telefoonnr) VALUES (%s, %s)"
   val = (recording_url, "0615517962")
@@ -60,5 +60,5 @@ def allerecs():
   resultaten = cursor.fetchall()
   returnstring = ""
   for r in resultaten:
-    returnstring += "<a href=\"https://pythonapplicatie-c4fub0d3eqbyc7gt.westeurope-01.azurewebsites.net/ai/brengrecordover/"+r[1].split("/")[7]+"\">"+r[1].split("/")[7]+"</a>"
+    returnstring += "<a href=\"https://pythonapplicatie-c4fub0d3eqbyc7gt.westeurope-01.azurewebsites.net/ai/brengrecordover/"+r[1].split("/")[7]+"\">"+r[1].split("/")[7]+"</a><br>"
   return returnstring  
