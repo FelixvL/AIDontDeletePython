@@ -21,3 +21,8 @@ def recording_ai_transcript(recid):
 @ai_bp.route("/allerecs", methods=['GET'])
 def allerecs():
   return aif.allerecs()
+
+@ai_bp.route("/praxisvraag/<term>", methods=['GET'])
+def praxisvraag(term):
+  return aif.praxisvraag(term)
+
