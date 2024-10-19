@@ -109,5 +109,5 @@ def allerecs():
   resultaten = cursor.fetchall()
   returnstring = ""
   for r in resultaten:
-    returnstring += r[1]+"<br>"
+    returnstring += "<a href=https://pythonapplicatie-c4fub0d3eqbyc7gt.westeurope-01.azurewebsites.net/ai/brengrecordover/"+r[1].split("/")[7]+">"+r[1].split("/")[7]+"<br>"
   return returnstring
