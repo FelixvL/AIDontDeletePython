@@ -30,7 +30,7 @@ def handle_recording():
   resp.say("Thanks for you update, see you around!", voice='alice')
   return str(resp)
 
-def recording_ai_transcript():
+def recording_ai_transcript(recid):
   account_sid = os.environ.get('TWILIOSID')
   auth_token = os.environ.get('TWILIOAUTH')
   audio_file_path = "opname.mp3"
