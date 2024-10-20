@@ -8,6 +8,10 @@ from openai import OpenAI
 from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 load_dotenv()
+import pandas as pd
+import re
+import json
+
 
 
 client = OpenAI(api_key=os.environ.get('ONZEENVKEY'))
@@ -139,3 +143,92 @@ def text_to_speech_openai(text):
 def download_audio(filename):
     print(filename)
     return send_file(filename, as_attachment=False)
+
+
+# =============   PRAXISAPP
+# Schoonmaakfunctie voor productdata
+def clean_data(df):
+    df['Productnaam_clean'] = df['Productnaam'].str.lower().replace(r'[^a-zA-Z0-9\s]', '', regex=True)
+    df['Toepassing_clean'] = df['Toepassing'].str.lower().replace(r'[^a-zA-Z0-9\s]', '', regex=True)
+    df['Omschrijving_clean'] = df['Omschrijving'].str.lower().replace(r'[^a-zA-Z0-9\s]', '', regex=True)
+    df['Categorie_clean'] = df['Categorie'].str.lower().replace(r'[^a-zA-Z0-9\s]', '', regex=True)
+    return df
+
+@ai_bp.route('/zoek', methods=['GET'])
+def zoek():
+    # Laad het productendataframe (CSV-bestan
+    df = pd.read_csv('bouwmarkt_producten_250.csv')
+
+    # Schoon de data
+    df = clean_data(df)
+
+    query = request.args.get('query')  # Haal zoekopdracht op uit de querystring
+    if not query:
+        return jsonify({'error': 'Geen zoekopdracht opgegeven'}), 400
+
+    # Verbeter de zoekopdracht met GPT, en geef productcontext mee
+    verbeterde_query = verbeter_zoekopdracht(query, df)
+    
+    # Roep de zoekfunctie aan met de verbeterde query
+    resultaten = zoek_product(verbeterde_query, df)
+    
+    return jsonify({
+        'originele_zoekopdracht': query,
+        'verbeterde_zoekopdracht': verbeterde_query,
+        'resultaten': resultaten
+    }), 200
+
+# Functie die GPT gebruikt om zoekopdrachten te verbeteren met gegevens uit het document
+def verbeter_zoekopdracht(zoekopdracht, df):
+    # Haal een voorbeeldlijst van producten en beschrijvingen op
+    voorbeeld_producten = df[['Productnaam']].to_dict(orient='records')
+
+    # Maak een string van de productnamen en omschrijvingen
+    product_context = "\n".join([f"{item['Productnaam']}" for item in voorbeeld_producten])
+
+    # Stuur een prompt naar GPT die rekening houdt met de beschikbare producten
+
+    prompt = (
+        f"De gebruiker zoekt naar het volgende: '{zoekopdracht}'. "
+        f"Hier is een lijst met beschikbare producten en beschrijvingen uit een bouwmarkt: \n{product_context}\n\n"
+        "Geef het product terug dat het dichtst bij de omschrijving in de buurt komt, of het meest waarschijnlijk in de buurt zal liggen van het opgegeven product, JE MOET er minimaal 1 en maximaal 6"
+        "Je bent onderdeel van een software keten, geef ALLEEN de productnamen terug als array opgeschreven, dus [\"Verfroller\",\"Sanitair kit\"]"
+    )
+    print(prompt)
+    messages = [
+        {"role": "system", "content": prompt}
+    ]
+    response = client.chat.completions.create(
+        model="gpt-4",
+        messages=messages,
+        max_tokens=1000,
+        temperature=0.7
+    )
+    verbeterde_zoekopdracht = response.choices[0].message.content
+    print(verbeterde_zoekopdracht)
+    return verbeterde_zoekopdracht
+
+import re
+
+def zoek_product(zoekopdrachten, df):
+    alle_resultaten = []
+    print(zoekopdrachten)
+    zoekopdrachten = json.loads(zoekopdrachten)
+    print(zoekopdrachten)
+    print(len(zoekopdrachten))
+    # Doorloop elke zoekopdracht in de array
+    for zoekopdracht in zoekopdrachten:
+        user_input_clean = re.sub(r'[^a-zA-Z0-9\s]', '', zoekopdracht.lower())
+        
+        # Zoek in alle relevante kolommen
+        gefilterde_rijen = df[df['Productnaam'] == zoekopdracht]
+        print(gefilterde_rijen)
+        #print(gefilterde_rijen)
+        #print("==", zoekopdracht)
+        # Voeg de resultaten toe aan de lijst met alle resultaten, per zoekopdracht
+        alle_resultaten.append({
+            'zoekopdracht': zoekopdracht,
+            'resultaten': gefilterde_rijen.to_dict(orient='records')
+        })
+    print(type(alle_resultaten[0]["resultaten"]))
+    return alle_resultaten

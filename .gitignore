@@ -5,3 +5,4 @@ blueprints/__pycache__/**
 .env
 .DS_Store
 *.wav
+*.mp3
