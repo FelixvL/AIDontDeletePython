@@ -4,3 +4,4 @@ openai
 python-dotenv
 mysql-connector-python
 twilio
+pandas
