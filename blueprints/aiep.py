@@ -157,7 +157,7 @@ def clean_data(df):
 @ai_bp.route('/zoek', methods=['GET'])
 def zoek():
     # Laad het productendataframe (CSV-bestan
-    df = pd.read_csv('bouwmarkt_producten_250.csv')
+    df = pd.read_csv('bouwmarkt_producten_250.csv', sep=";")
 
     # Schoon de data
     df = clean_data(df)
